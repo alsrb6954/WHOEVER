@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">WHOEVER</string>
+
+    <string name="kakao_app_key">efdfb0c69d6dd29cd6e3c675cda0975a</string>
 </resources>

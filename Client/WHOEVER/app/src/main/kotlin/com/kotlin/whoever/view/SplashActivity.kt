@@ -1,4 +1,4 @@
-package com.kotlin.whoever
+package com.kotlin.whoever.view
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -8,6 +8,6 @@ class SplashActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        startActivity<MainActivity>()
+        startActivity<LoginActivity>()
     }
 }

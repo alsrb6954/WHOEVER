@@ -1,14 +1,27 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.2.50'
-    ext.anko_version='0.10.6'
+    ext{
+        kotlin_version = '1.2.50'
+        anko_version='0.10.6'
+        rxjava_version='2.2.2'
+        rxandroid_version='2.1.0'
+        gson_version='2.8.5'
+        okhttp_version='3.11.0'
+        retrofit_version='2.4.0'
+        glide_version='4.8.0'
+        rxBindind_version='2.0.0'
+        archComponent_version = "1.1.1"
+    }
+
     repositories {
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
         google()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.4'
+        classpath 'com.android.tools.build:gradle:3.0.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -20,6 +33,8 @@ allprojects {
     repositories {
         google()
         jcenter()
+        mavenCentral()
+        maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/' }
     }
 }
 

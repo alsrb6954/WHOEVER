@@ -1,7 +1,8 @@
-package com.kotlin.whoever
+package com.kotlin.whoever.view
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.kotlin.whoever.R
 
 class MainActivity : AppCompatActivity() {
 
