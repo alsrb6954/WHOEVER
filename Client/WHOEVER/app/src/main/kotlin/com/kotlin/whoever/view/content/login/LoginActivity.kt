@@ -14,24 +14,21 @@ import com.kotlin.whoever.R
 import com.kotlin.whoever.common.provideLogin
 import com.kotlin.whoever.model.jsondata.User
 import com.kotlin.whoever.view.content.main.MainActivity
-import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.startActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import android.R.attr.data
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.common.api.ApiException
+import com.kotlin.whoever.constants.constants.Companion.RC_SIGN_IN
+import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.toast
 
 
 
 
 class LoginActivity : AppCompatActivity() {
-    companion object {
-        const val RC_SIGN_IN = 1000
-    }
 
     private val callback by lazy { SessionCallback() }
     private var kakaoAccessToken:String? = null
@@ -49,6 +46,7 @@ class LoginActivity : AppCompatActivity() {
         btn_google_login.setOnClickListener {
             googleLogin()
         }
+
     }
     // kakao
     private fun kakaoLogin() {
