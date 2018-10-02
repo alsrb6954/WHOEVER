@@ -53,7 +53,8 @@ dependencies {
     implementation "android.arch.persistence.room:runtime:$archComponent_version"
     implementation "android.arch.persistence.room:rxjava2:$archComponent_version"
 
-    compile group: 'com.kakao.sdk', name: 'usermgmt', version: project.KAKAO_SDK_VERSION
+    implementation group: 'com.kakao.sdk', name: 'usermgmt', version: project.KAKAO_SDK_VERSION
+    implementation "com.google.android.gms:play-services-auth:$googleAuth_version"
     kapt "android.arch.lifecycle:compiler:$archComponent_version"
     kapt "android.arch.persistence.room:compiler:$archComponent_version"
 

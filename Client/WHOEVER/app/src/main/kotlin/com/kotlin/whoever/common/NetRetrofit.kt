@@ -10,10 +10,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 
-// singleton
+// singleton(네트워크 통신을 위한 부분)
 private const val URL = "http://175.124.86.194:3000"
 
-fun provideLogin() = Retrofit.Builder().baseUrl(URL).addConverterFactory(GsonConverterFactory.create()).build().create(RetrofitService::class.java)
+fun provideLogin() = Retrofit.Builder().baseUrl(URL).addConverterFactory(GsonConverterFactory.create()).build().create(RetrofitService::class.java)!!
 
 
 //private fun provideOkHttpClient(interceptor: HttpLoggingInterceptor, authInterceptor:AuthInterceptor?):OkHttpClient{
