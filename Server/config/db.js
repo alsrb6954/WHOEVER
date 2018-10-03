@@ -1,7 +1,8 @@
 module.exports = function() {
   var mongoose = require('mongoose');
-  mongoose.connect('mongodb://localhost/test');
-  
+  var credentials = require('../lib/credentials.js');
+  mongoose.connect('mongodb://' + credentials);
+
   var db = mongoose.connection;
   db.on('error', console.error);
   db.once('open', function(){
