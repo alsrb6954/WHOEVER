@@ -3,6 +3,7 @@ var route = express.Router();
 var request = require('request');
 
 route.post('/kakao', function(req, res) {
+  console.log('fd')
   var wAccess_token = req.body.wAccess_token;
 
   var headers = {
