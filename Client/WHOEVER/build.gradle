@@ -2,7 +2,7 @@
 
 buildscript {
     ext{
-        kotlin_version = '1.2.50'
+        kotlin_version = '1.2.51'
         anko_version='0.10.6'
         rxjava_version='2.2.2'
         rxandroid_version='2.1.0'
@@ -12,6 +12,7 @@ buildscript {
         glide_version='4.8.0'
         rxBindind_version='2.0.0'
         archComponent_version = "1.1.1"
+        googleAuth_version = "15.0.1"
     }
 
     repositories {
@@ -21,7 +22,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath 'com.android.tools.build:gradle:3.2.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong
