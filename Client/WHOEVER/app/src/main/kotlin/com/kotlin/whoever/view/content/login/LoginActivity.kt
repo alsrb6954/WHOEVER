@@ -21,7 +21,10 @@ import retrofit2.Response
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.common.api.ApiException
+import com.kotlin.whoever.common.plusAssign
 import com.kotlin.whoever.constants.constants.Companion.RC_SIGN_IN
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.toast
 
@@ -36,6 +39,8 @@ class LoginActivity : AppCompatActivity() {
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(R.string.server_client_id.toString()).requestEmail().build()
     }
     private val mGoogleSignInClient by lazy { GoogleSignIn.getClient(this, gso) }
+    internal val disposables = CompositeDisposable()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -48,6 +53,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
     }
+
     // kakao
     private fun kakaoLogin() {
         Session.getCurrentSession().apply {
@@ -60,7 +66,6 @@ class LoginActivity : AppCompatActivity() {
         val signInIntent = mGoogleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode === RC_SIGN_IN) {
@@ -85,6 +90,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
     }
+
     inner class SessionCallback: ISessionCallback {
         override fun onSessionOpenFailed(exception: KakaoException?){}
         override fun onSessionOpened() {
@@ -94,22 +100,36 @@ class LoginActivity : AppCompatActivity() {
 
 
             // 비동기식 데이터 주고 받는 서버 부분(나중에 viewModel로 뺀다)
-            val call= provideLogin().getKakaoAccesToken(kakaoAccessToken.toString())
-            call.enqueue(object : Callback<User>{
-                override fun onFailure(call: Call<User>, t: Throwable) {
-                    Log.d("hoho", "fail")
-                }
+//            val call= provideLogin().getKakaoAccesToken(kakaoAccessToken.toString())
+//            call.enqueue(object : Callback<User>{
+//                override fun onFailure(call: Call<User>, t: Throwable) {
+//                    Log.d("hoho", "fail")
+//                }
+//
+//                override fun onResponse(call: Call<User>, response: Response<User>) {
+//                    val user = response.body()
+//                    if(user != null) {
+//                        Log.d("hoho", user!!.wUser_name)
+//                        updateUI()
+//                    }else{
+//                        Log.d("hoho", "씨발!!!")
+//                    }
+//                }
+//            })
 
-                override fun onResponse(call: Call<User>, response: Response<User>) {
-                    val user = response.body()
-                    if(user != null) {
-                        Log.d("hoho", user!!.wUser_name)
+            disposables += provideLogin().getKakaoAccesToken(kakaoAccessToken.toString())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe{} // 수행을 시작할때
+                    .doOnTerminate{} // 수행을 끝났을때
+                    .subscribe({user ->
+                        Log.d("hoho", user.wUser_name)
                         updateUI()
-                    }else{
+                    }) // 옵서버블을 구독
+                    {
+                        //에러
                         Log.d("hoho", "씨발!!!")
                     }
-                }
-            })
+
         }
     }
     private fun updateUI(){
@@ -121,6 +141,10 @@ class LoginActivity : AppCompatActivity() {
         if(account != null){
             updateUI()
         }
+    }
+    override fun onStop() {
+        super.onStop()
+        disposables.clear()
     }
 }
 

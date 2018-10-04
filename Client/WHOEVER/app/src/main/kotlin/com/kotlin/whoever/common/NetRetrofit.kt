@@ -8,12 +8,14 @@ import okhttp3.OkHttpClient
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 
 // singleton(네트워크 통신을 위한 부분)
 
-fun provideLogin() = Retrofit.Builder().baseUrl(URL).addConverterFactory(GsonConverterFactory.create()).build().create(RetrofitService::class.java)!!
+fun provideLogin() = Retrofit.Builder().baseUrl(URL).addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync()).
+        addConverterFactory(GsonConverterFactory.create()).build().create(RetrofitService::class.java)!!
 
 
 //private fun provideOkHttpClient(interceptor: HttpLoggingInterceptor, authInterceptor:AuthInterceptor?):OkHttpClient{
