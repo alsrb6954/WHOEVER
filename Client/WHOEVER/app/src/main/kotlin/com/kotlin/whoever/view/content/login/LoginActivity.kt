@@ -12,16 +12,13 @@ import com.kakao.auth.Session
 import com.kakao.util.exception.KakaoException
 import com.kotlin.whoever.R
 import com.kotlin.whoever.common.provideLogin
-import com.kotlin.whoever.model.jsondata.User
 import com.kotlin.whoever.view.content.main.MainActivity
 import org.jetbrains.anko.startActivity
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.common.api.ApiException
-import com.kotlin.whoever.common.plusAssign
+import com.kotlin.whoever.common.AutoClearedDisposable
+import com.kotlin.whoever.extensions.plusAssign
 import com.kotlin.whoever.constants.constants.Companion.RC_SIGN_IN
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -39,11 +36,14 @@ class LoginActivity : AppCompatActivity() {
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(R.string.server_client_id.toString()).requestEmail().build()
     }
     private val mGoogleSignInClient by lazy { GoogleSignIn.getClient(this, gso) }
-    internal val disposables = CompositeDisposable()
+    internal val disposables = AutoClearedDisposable(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        // LifeCycle.Observer() 함수를 사용하여 AutoClearedDisposable 객체를 옵서버에 등록
+        lifecycle += disposables
 
         btn_kakao_login.setOnClickListener {
             kakaoLogin()
@@ -51,7 +51,6 @@ class LoginActivity : AppCompatActivity() {
         btn_google_login.setOnClickListener {
             googleLogin()
         }
-
     }
 
     // kakao
@@ -66,6 +65,7 @@ class LoginActivity : AppCompatActivity() {
         val signInIntent = mGoogleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
+    
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode === RC_SIGN_IN) {
@@ -141,10 +141,6 @@ class LoginActivity : AppCompatActivity() {
         if(account != null){
             updateUI()
         }
-    }
-    override fun onStop() {
-        super.onStop()
-        disposables.clear()
     }
 }
 
