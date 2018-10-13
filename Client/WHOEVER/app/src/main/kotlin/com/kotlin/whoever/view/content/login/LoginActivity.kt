@@ -15,6 +15,7 @@ import com.kotlin.whoever.common.provideLogin
 import com.kotlin.whoever.view.content.main.MainActivity
 import org.jetbrains.anko.startActivity
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.common.SignInButton
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.common.api.ApiException
 import com.kotlin.whoever.common.AutoClearedDisposable
@@ -65,12 +66,12 @@ class LoginActivity : AppCompatActivity() {
         val signInIntent = mGoogleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
-    
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode === RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            Log.d("hoho", task.toString())
+            //Log.d("hoho", task.result.idToken)
             handleSignInResult(task)
         }
     }
@@ -85,7 +86,7 @@ class LoginActivity : AppCompatActivity() {
             // Signed in successfully, show authenticated UI.
             //updateUI()
         } catch (e: ApiException) {
-            Log.d("hoho", e.statusMessage)
+            Log.d("hoho", e.localizedMessage)
             toast("error").show()
         }
 
@@ -97,25 +98,6 @@ class LoginActivity : AppCompatActivity() {
             kakaoAccessToken = Session.getCurrentSession().accessToken
 
             Log.d("hoho", kakaoAccessToken.toString())
-
-
-            // 비동기식 데이터 주고 받는 서버 부분(나중에 viewModel로 뺀다)
-//            val call= provideLogin().getKakaoAccesToken(kakaoAccessToken.toString())
-//            call.enqueue(object : Callback<User>{
-//                override fun onFailure(call: Call<User>, t: Throwable) {
-//                    Log.d("hoho", "fail")
-//                }
-//
-//                override fun onResponse(call: Call<User>, response: Response<User>) {
-//                    val user = response.body()
-//                    if(user != null) {
-//                        Log.d("hoho", user!!.wUser_name)
-//                        updateUI()
-//                    }else{
-//                        Log.d("hoho", "씨발!!!")
-//                    }
-//                }
-//            })
 
             disposables += provideLogin().getKakaoAccesToken(kakaoAccessToken.toString())
                     .observeOn(AndroidSchedulers.mainThread())
