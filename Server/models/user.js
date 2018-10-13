@@ -1,24 +1,33 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+var keystone = require('keystone');
+var Types = keystone.Field.Types;
 
-// create a schema
-var userSchema = new Schema({
-  name: String,
-  username: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  admin: Boolean,
-  location: String,
-  meta: {
-    age: Number,
-    website: String
-  },
-  created_at: Date,
-  updated_at: Date
+/**
+ * User Model
+ * ==========
+ */
+var User = new keystone.List('User');
+
+User.add({
+	name: { type: Types.Name, required: true, index: true },
+	email: { type: Types.Email, initial: true, required: true, unique: true, index: true },
+	password: { type: Types.Password, initial: true, required: true },
+}, 'Permissions', {
+	isAdmin: { type: Boolean, label: 'Can access Keystone', index: true },
 });
 
-// the schema is useless so far
-// we need to create a model using it
-var User = mongoose.model('User', userSchema);
+// Provide access to Keystone
+User.schema.virtual('canAccessKeystone').get(function () {
+	return this.isAdmin;
+});
 
-// make this available to our users in our Node applications
-module.exports = User;
+
+/**
+ * Relationships
+ */
+
+
+/**
+ * Registration
+ */
+User.defaultColumns = 'name, email, isAdmin';
+User.register();
