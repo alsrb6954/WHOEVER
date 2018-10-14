@@ -1,9 +1,11 @@
 package com.kotlin.whoever.view.content.login
 
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.kakao.auth.AuthType
@@ -15,15 +17,16 @@ import com.kotlin.whoever.common.provideLogin
 import com.kotlin.whoever.view.content.main.MainActivity
 import org.jetbrains.anko.startActivity
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.common.SignInButton
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.common.api.ApiException
 import com.kotlin.whoever.common.AutoClearedDisposable
 import com.kotlin.whoever.extensions.plusAssign
 import com.kotlin.whoever.constants.constants.Companion.RC_SIGN_IN
+import com.kotlin.whoever.view.vm.login.LoginViewModel
+import com.kotlin.whoever.view.vm.login.LoginViewModelFactory
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_login.*
+import org.jetbrains.anko.longToast
 import org.jetbrains.anko.toast
 
 
@@ -37,14 +40,30 @@ class LoginActivity : AppCompatActivity() {
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(R.string.server_client_id.toString()).requestEmail().build()
     }
     private val mGoogleSignInClient by lazy { GoogleSignIn.getClient(this, gso) }
-    internal val disposables = AutoClearedDisposable(this)
+    private val disposables = AutoClearedDisposable(this)
+    private val viewDisposables = AutoClearedDisposable(lifecycleOwner = this, alwaysClearOnStop = false)
+    private val viewModelFactory by lazy { LoginViewModelFactory() }
+    lateinit var viewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        viewModel = ViewModelProviders.of(this, viewModelFactory)[LoginViewModel::class.java]
+
         // LifeCycle.Observer() 함수를 사용하여 AutoClearedDisposable 객체를 옵서버에 등록
         lifecycle += disposables
+        lifecycle += viewDisposables
+
+        // 에러메시지 구독
+        viewDisposables += viewModel.errorMessage
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe{message -> showError(message)}
+
+        // 작업 진행 여부 구독
+        viewDisposables += viewModel.isLoading
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { isLoading -> if(isLoading) showLoading() else hideLoading() }
 
         btn_kakao_login.setOnClickListener {
             kakaoLogin()
@@ -71,7 +90,6 @@ class LoginActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode === RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            //Log.d("hoho", task.result.idToken)
             handleSignInResult(task)
         }
     }
@@ -99,24 +117,21 @@ class LoginActivity : AppCompatActivity() {
 
             Log.d("hoho", kakaoAccessToken.toString())
 
-            disposables += provideLogin().getKakaoAccesToken(kakaoAccessToken.toString())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe{} // 수행을 시작할때
-                    .doOnTerminate{} // 수행을 끝났을때
-                    .subscribe({user ->
-                        Log.d("hoho", user.wUser_name)
-                        updateUI()
-                    }) // 옵서버블을 구독
-                    {
-                        //에러
-                        Log.d("hoho", "씨발!!!")
-                    }
-
+            viewModel.requestKakaoAccessToken(kakaoAccessToken.toString())
         }
     }
-    private fun updateUI(){
-        startActivity<MainActivity>()
+    private fun updateUI(){ startActivity<MainActivity>() }
+    private fun showLoading(){
+        login_loading.visibility = View.VISIBLE
+        login_loading.loop(true)
+        login_loading.playAnimation()
     }
+    private fun hideLoading(){
+        login_loading.visibility = View.INVISIBLE
+        login_loading.loop(false)
+        login_loading.pauseAnimation()
+    }
+    private fun showError(message: String){ longToast(message).show()}
     override fun onStart() {
         super.onStart()
         val account = GoogleSignIn.getLastSignedInAccount(this)

@@ -13,6 +13,7 @@ buildscript {
         rxBindind_version='2.0.0'
         archComponent_version = "1.1.1"
         googleAuth_version = "15.0.1"
+        lottie_version="2.7.0"
     }
 
     repositories {

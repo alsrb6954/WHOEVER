@@ -2,6 +2,7 @@ package com.kotlin.whoever.view.vm.login
 
 import android.arch.lifecycle.ViewModel
 import com.kotlin.whoever.common.provideLogin
+import com.kotlin.whoever.constants.constants.Companion.loginErrorMeassage
 import com.kotlin.whoever.unit.SupportOptional
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
@@ -18,9 +19,18 @@ class LoginViewModel:ViewModel() {
     fun requestKakaoAccessToken(accessToken:String) = provideLogin().getKakaoAccesToken(accessToken)
             .doOnSubscribe { isLoading.onNext(true) }
             .doOnTerminate { isLoading.onNext(false) }
-            .subscribe({
+            .subscribe({it ->
+
 
             }){
-                errorMessage.onNext(it.message ?: "Unexpected error")
+                errorMessage.onNext(it.message ?: loginErrorMeassage)
+            }!!
+    fun requestGoogleAccessToken(accessToken: String) = provideLogin().getGoogleAccesToken(accessToken)
+            .doOnSubscribe { isLoading.onNext(true) }
+            .doOnTerminate { isLoading.onNext(false) }
+            .subscribe ({
+
+            }){
+                errorMessage.onNext(it.message ?: loginErrorMeassage)
             }
 }

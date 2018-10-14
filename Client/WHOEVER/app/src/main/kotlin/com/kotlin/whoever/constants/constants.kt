@@ -7,6 +7,7 @@ class constants {
         const val tokenField = "wAccess_token"
         const val requestKakaoLogin = "auth/kakao"
         const val requestGoogleLogin = "auth/google"
+        const val loginErrorMeassage = "Unexpected error"
     }
 }
 
