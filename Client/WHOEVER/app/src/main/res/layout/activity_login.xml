@@ -12,14 +12,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="카카오 로그인"
-        android:layout_gravity="center_vertical"
-        />
+        android:layout_gravity="center_vertical" />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/btn_google_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"/>
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="메인" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/login_loading"
@@ -28,5 +32,6 @@
         android:layout_gravity="center_horizontal"
         android:visibility="gone"
         app:lottie_fileName="coffee_time.json"/>
+
 
 </FrameLayout>

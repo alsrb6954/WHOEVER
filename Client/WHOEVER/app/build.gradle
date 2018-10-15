@@ -57,7 +57,7 @@ dependencies {
 
     implementation group: 'com.kakao.sdk', name: 'usermgmt', version: project.KAKAO_SDK_VERSION
     implementation "com.google.android.gms:play-services-auth:$googleAuth_version"
-    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-auth:16.0.2'
     kapt "android.arch.lifecycle:compiler:$archComponent_version"
     kapt "android.arch.persistence.room:compiler:$archComponent_version"
 
