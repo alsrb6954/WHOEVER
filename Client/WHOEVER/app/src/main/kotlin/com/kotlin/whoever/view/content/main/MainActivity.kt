@@ -1,7 +1,9 @@
 package com.kotlin.whoever.view.content.main
 
+import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import com.kotlin.whoever.R
@@ -20,7 +22,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        menu_icon.useHardwareAcceleration(true)
+        menu_icon.apply {
+            useHardwareAcceleration(true)
+            speed = -1f
+        }
         menu_icon.setOnClickListener {
                 menu_icon.apply {
                     speed = -speed
@@ -28,8 +33,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     if (!isAnimating) { playAnimation() }
                 }
         }
-        fab.useHardwareAcceleration(true)
+        fab.apply {
+            useHardwareAcceleration(true)
+            speed = -1f
+        }
         fab.setOnClickListener {
+            anim()
             fab.apply {
                 speed = -speed
                 setMinAndMaxFrame(0, 5)
