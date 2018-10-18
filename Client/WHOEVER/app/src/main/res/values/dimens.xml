@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="main_button_margin">10dp</dimen>
+    <dimen name="nav_head_padding">16dp</dimen>
+    <dimen name="nav_head_image">64dp</dimen>
 </resources>

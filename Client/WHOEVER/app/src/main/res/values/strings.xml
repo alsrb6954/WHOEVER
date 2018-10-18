@@ -3,4 +3,7 @@
 
     <string name="kakao_app_key">0fd00f465bf5ae574a8ba7b12b3b014f</string>
     <string name="server_client_id">AIzaSyAY5fdW0Xne_vHjwSa1lZRwdkcJW5nH8G0</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>
