@@ -30,6 +30,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.toast
 import com.google.firebase.auth.GoogleAuthProvider
+import com.jakewharton.rxbinding2.view.RxView
 
 
 class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedListener  {
@@ -73,9 +74,12 @@ class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { isLoading -> if(isLoading) showLoading() else hideLoading() }
 
-        btn_kakao_login.setOnClickListener { kakaoLogin() }
-        btn_google_login.setOnClickListener { googleLogin() }
-
+        viewDisposables += RxView.clicks(btn_kakao_login)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { kakaoLogin()}
+        viewDisposables += RxView.clicks(btn_google_login)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { googleLogin() }
         btn.setOnClickListener { updateUI() }
     }
 
