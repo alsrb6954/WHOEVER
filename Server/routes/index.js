@@ -30,6 +30,7 @@ keystone.pre('render', middleware.flashMessages);
 var routes = {
 	views: importRoutes('./views'),
     auth: importRoutes('./auth'),
+    data: importRoutes('./data'),
 };
 
 // Setup Route Bindings
@@ -40,6 +41,9 @@ exports = module.exports = function (app) {
     // Auths
     app.post('/auth/kakao', routes.auth.kakao);
     app.post('/auth/google', routes.auth.google);
+
+    // data
+    app.get('/data/category', routes.data.category);
 
 	// NOTE: To protect a route so that only admins can see it, use the requireUser middleware:
 	// app.get('/protected', middleware.requireUser, routes.views.protected);
