@@ -3,12 +3,12 @@ var request = require('request');
 
 exports = module.exports = function (req, res) {
 
-    var wAccess_token = req.body.wAccess_token;
-    console.log(wAccess_token);
+    var access_token = req.body.access_token;
+    console.log(access_token);
 
     var headers = {
       'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-      'Authorization': 'Bearer ' + wAccess_token
+      'Authorization': 'Bearer ' + access_token
     }
 
     var options = {
