@@ -2,17 +2,13 @@
 
 Welcome! This is the default page we've installed for your convenience. Go ahead and edit it.
 
-## Installation
-
-* [MacOS](Installation on MacOS)
-
 ## Data
 
-* [Category](docs/Category)
+* [Category](docs/Category.md)
 
 ## Architecture
 
-* [API Specification](docs/API Specification)
+* [API Specification](docs/API Specification.md)
 
 ## Wiki features
 
