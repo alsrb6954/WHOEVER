@@ -12,7 +12,7 @@ User.add({
 	email: { type: Types.Email, unique: true, index: true },
 	password: { type: Types.Password },
     w_user_id: { type: String, required: true, initial: true },
-    w_user_email: { type: String, required: true, initial: true },
+    w_user_name: { type: String },
     w_user_profile: { type: String },
     w_eula_version: { type: String, required: true, initial: true },
     access_token: { type: String, unique:true, index: true, required: true, initial: true },

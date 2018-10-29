@@ -59,7 +59,12 @@ exports = module.exports = function (req, res) {
                                     }
                                 });
                             }
-                            return res.status(200).json({w_token: created.w_token});
+                            return res.status(200).json({
+                                w_token: created.w_token,
+                                w_user_id: user.w_user_id,
+                                w_user_name: user.w_user_name,
+                                w_user_profile: user.w_user_profile
+                            });
                         })
                     })
                 } else { // If kakao user is already exist.
@@ -71,7 +76,7 @@ exports = module.exports = function (req, res) {
                             }
                         });
                     })
-                    AuthToken.model.findOne({user_id: user._id}).exec(function(err, authToken) {
+                    AuthToken.model.findOne({w_user_id: user._id}).exec(function(err, authToken) {
                         if(err) return res.status(500).json({
                             error: {
                                 message: "Server error.",
@@ -92,10 +97,21 @@ exports = module.exports = function (req, res) {
                                         }
                                     });
                                 }
-                                return res.status(200).json({w_token: created.w_token});
+                                return res.status(200).json({
+                                    w_token: created.w_token,
+                                    w_user_id: user.w_user_id,
+                                    w_user_name: user.w_user_name,
+                                    w_user_profile: user.w_user_profile
+                                });
                             })
+                        } else {
+                            return res.status(200).json({
+                                w_token: created.w_token,
+                                w_user_id: user.w_user_id,
+                                w_user_name: user.w_user_name,
+                                w_user_profile: user.w_user_profile
+                            });
                         }
-                        return res.status(200).json({w_token: authToken.w_token});
                     })
                 }
             })
